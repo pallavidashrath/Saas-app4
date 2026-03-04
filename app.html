@@ -148,44 +148,62 @@
 
             <!-- Dashboard Route -->
             <section id="route-dashboard" class="route-view">
+                <div id="prefs-notice" class="u-hidden"
+                    style="max-width: var(--max-width-text); margin: 0 auto; margin-top: var(--space-4); background: var(--color-background); border: 1px solid var(--color-accent); padding: var(--space-3); border-radius: 4px; border-left: 4px solid var(--color-accent);">
+                    <p style="margin: 0; color: var(--color-accent); font-weight: 500;">Set your preferences to activate
+                        intelligent matching.</p>
+                </div>
+
                 <div class="filter-bar"
-                    style="max-width: var(--max-width-text); margin: 0 auto; margin-top: var(--space-5); margin-bottom: var(--space-4); display: flex; gap: var(--space-2); flex-wrap: wrap;">
-                    <input type="text" id="filter-search" class="input" placeholder="Search title or company..."
-                        style="flex: 1; min-width: 200px;">
-                    <select id="filter-location" class="input" style="width: auto;">
-                        <option value="">Any Location</option>
-                        <option>Bangalore</option>
-                        <option>Hyderabad</option>
-                        <option>Pune</option>
-                        <option>Chennai</option>
-                        <option>Mumbai</option>
-                        <option>Delhi NCR</option>
-                        <option>Gurgaon</option>
-                        <option>Noida</option>
-                    </select>
-                    <select id="filter-mode" class="input" style="width: auto;">
-                        <option value="">Any Mode</option>
-                        <option>Remote</option>
-                        <option>Hybrid</option>
-                        <option>Onsite</option>
-                    </select>
-                    <select id="filter-exp" class="input" style="width: auto;">
-                        <option value="">Any Experience</option>
-                        <option>Fresher</option>
-                        <option>0-1</option>
-                        <option>1-3</option>
-                        <option>3-5</option>
-                    </select>
-                    <select id="filter-source" class="input" style="width: auto;">
-                        <option value="">Any Source</option>
-                        <option>LinkedIn</option>
-                        <option>Naukri</option>
-                        <option>Indeed</option>
-                    </select>
-                    <select id="filter-sort" class="input" style="width: auto;">
-                        <option value="latest">Sort: Latest</option>
-                        <option value="oldest">Sort: Oldest</option>
-                    </select>
+                    style="max-width: var(--max-width-text); margin: 0 auto; margin-top: var(--space-5); margin-bottom: var(--space-4); display: flex; gap: var(--space-2); flex-wrap: wrap; align-items: center;">
+                    <div style="flex: 1; display: flex; gap: var(--space-2); flex-wrap: wrap;">
+                        <input type="text" id="filter-search" class="input" placeholder="Search title or company..."
+                            style="flex: 1; min-width: 200px;">
+                        <select id="filter-location" class="input" style="width: auto;">
+                            <option value="">Any Location</option>
+                            <option>Bangalore</option>
+                            <option>Hyderabad</option>
+                            <option>Pune</option>
+                            <option>Chennai</option>
+                            <option>Mumbai</option>
+                            <option>Delhi NCR</option>
+                            <option>Gurgaon</option>
+                            <option>Noida</option>
+                        </select>
+                        <select id="filter-mode" class="input" style="width: auto;">
+                            <option value="">Any Mode</option>
+                            <option>Remote</option>
+                            <option>Hybrid</option>
+                            <option>Onsite</option>
+                        </select>
+                        <select id="filter-exp" class="input" style="width: auto;">
+                            <option value="">Any Experience</option>
+                            <option>Fresher</option>
+                            <option>0-1</option>
+                            <option>1-3</option>
+                            <option>3-5</option>
+                        </select>
+                        <select id="filter-source" class="input" style="width: auto;">
+                            <option value="">Any Source</option>
+                            <option>LinkedIn</option>
+                            <option>Naukri</option>
+                            <option>Indeed</option>
+                        </select>
+                        <select id="filter-sort" class="input" style="width: auto;">
+                            <option value="latest">Sort: Latest</option>
+                            <option value="score">Sort: Match Score</option>
+                            <option value="salary">Sort: Salary</option>
+                            <option value="oldest">Sort: Oldest</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div
+                    style="max-width: var(--max-width-text); margin: 0 auto; margin-bottom: var(--space-4); display: flex; align-items: center; gap: var(--space-2);">
+                    <input type="checkbox" id="toggle-matches" style="width: 18px; height: 18px; cursor: pointer;">
+                    <label for="toggle-matches"
+                        style="cursor: pointer; font-size: var(--text-sm); font-weight: 500;">Show only jobs above my
+                        threshold</label>
                 </div>
 
                 <div id="dashboard-job-list" style="max-width: var(--max-width-text); margin: 0 auto;">
@@ -195,8 +213,9 @@
                 <div id="dashboard-empty-state" class="empty-state u-hidden"
                     style="max-width: var(--max-width-text); margin: 0 auto; margin-top: var(--space-5);">
                     <div class="empty-state__icon">○</div>
-                    <h3 class="empty-state__title">No jobs match your search</h3>
-                    <p class="empty-state__description">Try adjusting your filters to find more jobs.</p>
+                    <h3 class="empty-state__title">No jobs found</h3>
+                    <p class="empty-state__description">No roles match your criteria. Adjust filters or lower threshold.
+                    </p>
                 </div>
             </section>
 
@@ -247,52 +266,68 @@
                     <h2 class="u-mb-4">Notification Preferences</h2>
 
                     <div class="input-group u-mb-3">
-                        <label class="input-label" for="pref-role">Role keywords</label>
-                        <input type="text" id="pref-role" class="input" placeholder="e.g. Frontend Engineer, React">
+                        <label class="input-label" for="pref-role">Role keywords (comma-separated)</label>
+                        <input type="text" id="pref-role" class="input"
+                            placeholder="e.g. Frontend Engineer, React, SDE">
                     </div>
 
                     <div class="input-group u-mb-3">
-                        <label class="input-label" for="pref-location">Preferred locations</label>
-                        <input type="text" id="pref-location" class="input" placeholder="e.g. New York, London, Remote">
-                    </div>
-
-                    <div class="input-group u-mb-3">
-                        <label class="input-label" for="pref-mode">Mode</label>
-                        <select id="pref-mode" class="input">
+                        <label class="input-label" for="pref-location-multi">Preferred locations</label>
+                        <select id="pref-location-multi" class="input" multiple style="height: 120px;">
+                            <option>Bangalore</option>
+                            <option>Hyderabad</option>
+                            <option>Pune</option>
+                            <option>Chennai</option>
+                            <option>Mumbai</option>
+                            <option>Delhi NCR</option>
+                            <option>Gurgaon</option>
+                            <option>Noida</option>
                             <option>Remote</option>
-                            <option>Hybrid</option>
-                            <option>Onsite</option>
                         </select>
+                        <small style="opacity: 0.6;">Hold Ctrl (or Cmd) to select multiple.</small>
+                    </div>
+
+                    <div class="input-group u-mb-3">
+                        <label class="input-label">Preferred Mode</label>
+                        <div style="display: flex; gap: var(--space-3); margin-top: var(--space-1);">
+                            <label style="display: flex; align-items: center; gap: var(--space-1); cursor: pointer;">
+                                <input type="checkbox" name="pref-mode" value="Remote"> Remote
+                            </label>
+                            <label style="display: flex; align-items: center; gap: var(--space-1); cursor: pointer;">
+                                <input type="checkbox" name="pref-mode" value="Hybrid"> Hybrid
+                            </label>
+                            <label style="display: flex; align-items: center; gap: var(--space-1); cursor: pointer;">
+                                <input type="checkbox" name="pref-mode" value="Onsite"> Onsite
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="input-group u-mb-3">
+                        <label class="input-label" for="pref-exp">Experience level</label>
+                        <select id="pref-exp" class="input">
+                            <option>Fresher</option>
+                            <option>0-1</option>
+                            <option>1-3</option>
+                            <option>3-5</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group u-mb-3">
+                        <label class="input-label" for="pref-skills">Skills (comma-separated)</label>
+                        <input type="text" id="pref-skills" class="input" placeholder="e.g. React, Python, Java">
                     </div>
 
                     <div class="input-group u-mb-4">
-                        <label class="input-label" for="pref-exp">Experience level</label>
-                        <select id="pref-exp" class="input">
-                            <option>Junior</option>
-                            <option>Mid-Level</option>
-                            <option>Senior</option>
-                            <option>Staff/Principal</option>
-                        </select>
+                        <div style="display: flex; justify-content: space-between;">
+                            <label class="input-label" for="pref-threshold">Minimum Match Score</label>
+                            <span id="threshold-value" style="font-weight: 500;">40</span>
+                        </div>
+                        <input type="range" id="pref-threshold" min="0" max="100" value="40" class="input"
+                            style="padding: 0; cursor: pointer;">
                     </div>
 
-                    <button id="save-preferences-btn" class="btn btn--primary" onclick="
-                        const role = document.getElementById('pref-role').value;
-                        const loc = document.getElementById('pref-location').value;
-                        const mode = document.getElementById('pref-mode').value;
-                        const exp = document.getElementById('pref-exp').value;
-                        
-                        localStorage.setItem('userPrefs', JSON.stringify({ role, loc, mode, exp }));
-                        window.renderPreferences();
-
-                        const btn = this;
-                        const originalText = btn.textContent;
-                        btn.textContent = 'Saved!';
-                        btn.classList.add('btn--success');
-                        setTimeout(() => {
-                            btn.textContent = originalText;
-                            btn.classList.remove('btn--success');
-                        }, 2000);
-                    ">Save Preferences</button>
+                    <button id="save-preferences-btn" class="btn btn--primary"
+                        onclick="window.saveJobTrackerPreferences()">Save Preferences</button>
                 </div>
             </section>
 
@@ -448,6 +483,17 @@
             const dashboardEmptyState = document.getElementById('dashboard-empty-state');
             const savedJobList = document.getElementById('saved-job-list');
             const savedEmptyState = document.getElementById('saved-empty-state');
+            const prefsNotice = document.getElementById('prefs-notice');
+            const toggleMatches = document.getElementById('toggle-matches');
+
+            // Settings Fields
+            const prefRange = document.getElementById('pref-threshold');
+            const thresholdValueDisp = document.getElementById('threshold-value');
+            if (prefRange) {
+                prefRange.addEventListener('input', () => {
+                    thresholdValueDisp.textContent = prefRange.value;
+                });
+            }
 
             // Filters
             const filterSearch = document.getElementById('filter-search');
@@ -461,6 +507,105 @@
 
             function saveJobData() {
                 localStorage.setItem('savedJobIds', JSON.stringify(savedJobIds));
+            }
+
+            window.saveJobTrackerPreferences = function () {
+                const roleKeywords = document.getElementById('pref-role').value.split(',').map(s => s.trim().toLowerCase()).filter(s => s);
+                const preferredLocations = Array.from(document.getElementById('pref-location-multi').selectedOptions).map(opt => opt.value);
+                const preferredMode = Array.from(document.querySelectorAll('input[name="pref-mode"]:checked')).map(cb => cb.value);
+                const experienceLevel = document.getElementById('pref-exp').value;
+                const skills = document.getElementById('pref-skills').value.split(',').map(s => s.trim().toLowerCase()).filter(s => s);
+                const minMatchScore = parseInt(document.getElementById('pref-threshold').value);
+
+                const prefs = {
+                    roleKeywords,
+                    preferredLocations,
+                    preferredMode,
+                    experienceLevel,
+                    skills,
+                    minMatchScore,
+                    raw: {
+                        role: document.getElementById('pref-role').value,
+                        skills: document.getElementById('pref-skills').value
+                    }
+                };
+
+                localStorage.setItem('jobTrackerPreferences', JSON.stringify(prefs));
+
+                // Also update UI and redirect/show feedback
+                const btn = document.getElementById('save-preferences-btn');
+                const originalText = btn.textContent;
+                btn.textContent = 'Saved!';
+                btn.classList.add('btn--success');
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('btn--success');
+                }, 2000);
+
+                window.renderOverviewPreferences();
+                renderDashboard();
+            };
+
+            function getPreferences() {
+                const prefsStr = localStorage.getItem('jobTrackerPreferences');
+                return prefsStr ? JSON.parse(prefsStr) : null;
+            }
+
+            function calculateMatchScore(job, prefs) {
+                if (!prefs) return 0;
+                let score = 0;
+
+                // 1) Role Keywords (+25 Title, +15 Description)
+                const title = job.title.toLowerCase();
+                const desc = job.description.toLowerCase();
+                let kwTitleMatch = false;
+                let kwDescMatch = false;
+
+                prefs.roleKeywords.forEach(kw => {
+                    if (title.includes(kw)) kwTitleMatch = true;
+                    if (desc.includes(kw)) kwDescMatch = true;
+                });
+
+                if (kwTitleMatch) score += 25;
+                if (kwDescMatch) score += 15;
+
+                // 2) Location (+15)
+                if (prefs.preferredLocations.includes(job.location)) score += 15;
+
+                // 3) Mode (+10)
+                if (prefs.preferredMode.includes(job.mode)) score += 10;
+
+                // 4) Experience (+10)
+                if (job.experience === prefs.experienceLevel) score += 10;
+
+                // 5) Skills (+15 any overlap)
+                const jobSkills = job.skills.map(s => s.toLowerCase());
+                const userSkills = prefs.skills;
+                if (userSkills.some(s => jobSkills.includes(s))) score += 15;
+
+                // 6) Recency (+5 if <= 2 days)
+                if (job.postedDaysAgo <= 2) score += 5;
+
+                // 7) Source (+5 if LinkedIn)
+                if (job.source === 'LinkedIn') score += 5;
+
+                return Math.min(score, 100);
+            }
+
+            function getScoreColor(score) {
+                if (score >= 80) return '#2e7d32'; // Green
+                if (score >= 60) return '#f9a825'; // Amber
+                if (score >= 40) return '#757575'; // Neutral Grey
+                return '#bdbdbd'; // Subtle Grey
+            }
+
+            function parseSalary(salaryStr) {
+                if (!salaryStr) return 0;
+                const clean = salaryStr.replace(/[^0-9–-]/g, '');
+                const parts = clean.split(/[–-]/).map(Number).filter(n => !isNaN(n));
+                if (parts.length === 0) return 0;
+                const avg = parts.reduce((a, b) => a + b, 0) / parts.length;
+                return salaryStr.includes('month') ? avg * 12 / 100 : avg;
             }
 
             window.toggleSaveJob = function (jobId) {
@@ -481,6 +626,9 @@
             window.viewJob = function (jobId) {
                 const job = window.JOBS_DATA.find(j => j.id === jobId);
                 if (!job) return;
+
+                const prefs = getPreferences();
+                const score = calculateMatchScore(job, prefs);
 
                 window.currentModalJobId = jobId;
                 document.getElementById('modal-title').textContent = job.title;
@@ -504,7 +652,6 @@
                 saveBtn.onclick = () => window.toggleSaveJob(job.id);
 
                 document.getElementById('modal-apply-btn').href = job.applyUrl;
-
                 document.getElementById('job-modal').style.display = 'flex';
             };
 
@@ -512,18 +659,21 @@
                 document.getElementById('job-modal').style.display = 'none';
             };
 
-            function createJobCardHTML(job) {
+            function createJobCardHTML(job, prefs) {
                 const isSaved = savedJobIds.includes(job.id);
+                const score = calculateMatchScore(job, prefs);
+                const scoreColor = getScoreColor(score);
+
                 return `
-                <div class="card card--no-shadow" style="margin-bottom: var(--space-3);">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div>
-                            <h3 style="margin-bottom: var(--space-1);">${job.title}</h3>
-                            <p style="font-weight: 500; font-size: var(--text-sm);">${job.company}</p>
-                        </div>
-                        <div style="text-align: right;">
-                            <span style="font-size: var(--text-xs); background: var(--color-background); padding: var(--space-1) var(--space-2); border-radius: 4px; border: 1px solid var(--color-border);">${job.source}</span>
-                        </div>
+                <div class="card card--no-shadow" style="margin-bottom: var(--space-3); position: relative;">
+                    ${prefs ? `
+                    <div style="position: absolute; top: var(--space-3); right: var(--space-3); font-size: var(--text-xs); font-weight: 700; color: white; background: ${scoreColor}; padding: 4px 8px; border-radius: 20px;">
+                        ${score}% Match
+                    </div>` : ''}
+                    
+                    <div style="padding-right: 80px;">
+                        <h3 style="margin-bottom: var(--space-1);">${job.title}</h3>
+                        <p style="font-weight: 500; font-size: var(--text-sm);">${job.company}</p>
                     </div>
                     
                     <div style="display: flex; gap: var(--space-3); margin-top: var(--space-2); font-size: var(--text-sm); opacity: 0.8; flex-wrap: wrap;">
@@ -532,7 +682,9 @@
                         <span>💰 ${job.salaryRange}</span>
                     </div>
                     
-                    <p style="font-size: var(--text-xs); margin-top: var(--space-2); opacity: 0.6;">Posted ${job.postedDaysAgo} days ago</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-2);">
+                        <p style="font-size: var(--text-xs); opacity: 0.6; margin: 0;">Posted ${job.postedDaysAgo} days ago • via ${job.source}</p>
+                    </div>
 
                     <div style="display: flex; gap: var(--space-2); margin-top: var(--space-3);">
                         <button class="btn btn--secondary" onclick="viewJob('${job.id}')">View</button>
@@ -546,23 +698,41 @@
             function renderDashboard() {
                 if (!window.JOBS_DATA) return;
 
+                const prefs = getPreferences();
+                if (!prefs) {
+                    prefsNotice.classList.remove('u-hidden');
+                } else {
+                    prefsNotice.classList.add('u-hidden');
+                }
+
                 const term = filterSearch.value.toLowerCase();
                 const loc = filterLocation.value;
                 const mode = filterMode.value;
                 const exp = filterExp.value;
                 const src = filterSource.value;
                 const sort = filterSort.value;
+                const onlyMatches = toggleMatches.checked;
 
-                let filtered = window.JOBS_DATA.filter(job => {
+                let filtered = window.JOBS_DATA.map(job => ({
+                    ...job,
+                    _score: calculateMatchScore(job, prefs),
+                    _salaryVal: parseSalary(job.salaryRange)
+                })).filter(job => {
                     const matchSearch = job.title.toLowerCase().includes(term) || job.company.toLowerCase().includes(term);
                     const matchLoc = loc ? job.location === loc : true;
                     const matchMode = mode ? job.mode === mode : true;
                     const matchExp = exp ? job.experience === exp : true;
                     const matchSrc = src ? job.source === src : true;
-                    return matchSearch && matchLoc && matchMode && matchExp && matchSrc;
+                    const matchThreshold = onlyMatches ? (prefs ? job._score >= prefs.minMatchScore : true) : true;
+
+                    return matchSearch && matchLoc && matchMode && matchExp && matchSrc && matchThreshold;
                 });
 
-                if (sort === 'latest') {
+                if (sort === 'score') {
+                    filtered.sort((a, b) => b._score - a._score);
+                } else if (sort === 'salary') {
+                    filtered.sort((a, b) => b._salaryVal - a._salaryVal);
+                } else if (sort === 'latest') {
                     filtered.sort((a, b) => a.postedDaysAgo - b.postedDaysAgo);
                 } else {
                     filtered.sort((a, b) => b.postedDaysAgo - a.postedDaysAgo);
@@ -573,42 +743,51 @@
                     dashboardEmptyState.classList.remove('u-hidden');
                 } else {
                     dashboardEmptyState.classList.add('u-hidden');
-                    dashboardJobList.innerHTML = filtered.map(createJobCardHTML).join('');
+                    dashboardJobList.innerHTML = filtered.map(j => createJobCardHTML(j, prefs)).join('');
                 }
             }
 
             function renderSavedJobs() {
                 if (!window.JOBS_DATA) return;
-
+                const prefs = getPreferences();
                 const savedList = window.JOBS_DATA.filter(job => savedJobIds.includes(job.id));
                 if (savedList.length === 0) {
                     savedJobList.innerHTML = '';
                     savedEmptyState.classList.remove('u-hidden');
                 } else {
                     savedEmptyState.classList.add('u-hidden');
-                    savedJobList.innerHTML = savedList.map(createJobCardHTML).join('');
+                    savedJobList.innerHTML = savedList.map(j => createJobCardHTML(j, prefs)).join('');
                 }
             }
 
-            // Bind filters
-            [filterSearch, filterLocation, filterMode, filterExp, filterSource, filterSort].forEach(el => {
-                if (el) el.addEventListener('input', renderDashboard);
-            });
-
-            window.renderPreferences = function () {
-                const prefsStr = localStorage.getItem('userPrefs');
+            window.renderOverviewPreferences = function () {
+                const prefs = getPreferences();
                 const prefsContainer = document.getElementById('saved-preferences-container');
-                if (prefsStr) {
-                    const prefs = JSON.parse(prefsStr);
-                    document.getElementById('display-pref-role').textContent = prefs.role || 'Any';
-                    document.getElementById('display-pref-loc').textContent = prefs.loc || 'Any';
-                    document.getElementById('display-pref-mode').textContent = prefs.mode || 'Any';
-                    document.getElementById('display-pref-exp').textContent = prefs.exp || 'Any';
+                if (prefs) {
+                    document.getElementById('display-pref-role').textContent = prefs.raw.role || 'Any';
+                    document.getElementById('display-pref-loc').textContent = prefs.preferredLocations.join(', ') || 'Any';
+                    document.getElementById('display-pref-mode').textContent = prefs.preferredMode.join(', ') || 'Any';
+                    document.getElementById('display-pref-exp').textContent = prefs.experienceLevel || 'Any';
 
-                    document.getElementById('pref-role').value = prefs.role || '';
-                    document.getElementById('pref-location').value = prefs.loc || '';
-                    document.getElementById('pref-mode').value = prefs.mode || 'Remote';
-                    document.getElementById('pref-exp').value = prefs.exp || 'Junior';
+                    // Prefill form
+                    if (document.getElementById('pref-role')) {
+                        document.getElementById('pref-role').value = prefs.raw.role || '';
+                        document.getElementById('pref-skills').value = prefs.raw.skills || '';
+                        document.getElementById('pref-exp').value = prefs.experienceLevel || 'Fresher';
+                        document.getElementById('pref-threshold').value = prefs.minMatchScore || 40;
+                        document.getElementById('threshold-value').textContent = prefs.minMatchScore || 40;
+
+                        // Select multi
+                        const locSelect = document.getElementById('pref-location-multi');
+                        Array.from(locSelect.options).forEach(opt => {
+                            opt.selected = prefs.preferredLocations.includes(opt.value);
+                        });
+
+                        // Checkboxes
+                        document.querySelectorAll('input[name="pref-mode"]').forEach(cb => {
+                            cb.checked = prefs.preferredMode.includes(cb.value);
+                        });
+                    }
 
                     if (prefsContainer) prefsContainer.style.display = 'block';
                 } else {
@@ -616,8 +795,13 @@
                 }
             };
 
+            // Bind filters
+            [filterSearch, filterLocation, filterMode, filterExp, filterSource, filterSort, toggleMatches].forEach(el => {
+                if (el) el.addEventListener('input', renderDashboard);
+            });
+
             // Initial Render
-            window.renderPreferences();
+            window.renderOverviewPreferences();
             renderDashboard();
             renderSavedJobs();
 
