@@ -112,7 +112,7 @@
             <div class="top-bar__brand">Job Notification App</div>
 
             <nav class="app-nav">
-                <a href="/" class="nav-link active" data-route="/">Dashboard</a>
+                <a href="/dashboard" class="nav-link active" data-route="/dashboard">Dashboard</a>
                 <a href="/saved" class="nav-link" data-route="/saved">Saved</a>
                 <a href="/digest" class="nav-link" data-route="/digest">Digest</a>
                 <a href="/settings" class="nav-link" data-route="/settings">Settings</a>
@@ -124,7 +124,7 @@
 
         <!-- MOBILE NAVIGATION PANEL -->
         <nav class="mobile-nav-panel">
-            <a href="/" class="nav-link active" data-route="/">Dashboard</a>
+            <a href="/dashboard" class="nav-link active" data-route="/dashboard">Dashboard</a>
             <a href="/saved" class="nav-link" data-route="/saved">Saved</a>
             <a href="/digest" class="nav-link" data-route="/digest">Digest</a>
             <a href="/settings" class="nav-link" data-route="/settings">Settings</a>
@@ -148,17 +148,81 @@
 
             <!-- Dashboard Route -->
             <section id="route-dashboard" class="route-view">
-                <div class="empty-state"
+                <div class="filter-bar"
+                    style="max-width: var(--max-width-text); margin: 0 auto; margin-top: var(--space-5); margin-bottom: var(--space-4); display: flex; gap: var(--space-2); flex-wrap: wrap;">
+                    <input type="text" id="filter-search" class="input" placeholder="Search title or company..."
+                        style="flex: 1; min-width: 200px;">
+                    <select id="filter-location" class="input" style="width: auto;">
+                        <option value="">Any Location</option>
+                        <option>Bangalore</option>
+                        <option>Hyderabad</option>
+                        <option>Pune</option>
+                        <option>Chennai</option>
+                        <option>Mumbai</option>
+                        <option>Delhi NCR</option>
+                        <option>Gurgaon</option>
+                        <option>Noida</option>
+                    </select>
+                    <select id="filter-mode" class="input" style="width: auto;">
+                        <option value="">Any Mode</option>
+                        <option>Remote</option>
+                        <option>Hybrid</option>
+                        <option>Onsite</option>
+                    </select>
+                    <select id="filter-exp" class="input" style="width: auto;">
+                        <option value="">Any Experience</option>
+                        <option>Fresher</option>
+                        <option>0-1</option>
+                        <option>1-3</option>
+                        <option>3-5</option>
+                    </select>
+                    <select id="filter-source" class="input" style="width: auto;">
+                        <option value="">Any Source</option>
+                        <option>LinkedIn</option>
+                        <option>Naukri</option>
+                        <option>Indeed</option>
+                    </select>
+                    <select id="filter-sort" class="input" style="width: auto;">
+                        <option value="latest">Sort: Latest</option>
+                        <option value="oldest">Sort: Oldest</option>
+                    </select>
+                </div>
+
+                <div id="dashboard-job-list" style="max-width: var(--max-width-text); margin: 0 auto;">
+                    <!-- Jobs will be rendered here -->
+                </div>
+
+                <div id="dashboard-empty-state" class="empty-state u-hidden"
                     style="max-width: var(--max-width-text); margin: 0 auto; margin-top: var(--space-5);">
                     <div class="empty-state__icon">○</div>
-                    <h3 class="empty-state__title">No jobs yet</h3>
-                    <p class="empty-state__description">In the next step, you will load a realistic dataset.</p>
+                    <h3 class="empty-state__title">No jobs match your search</h3>
+                    <p class="empty-state__description">Try adjusting your filters to find more jobs.</p>
                 </div>
             </section>
 
             <!-- Saved Route -->
             <section id="route-saved" class="route-view">
-                <div class="empty-state"
+
+                <div id="saved-preferences-container"
+                    style="max-width: var(--max-width-text); margin: 0 auto; margin-top: var(--space-5); display: none;">
+                    <h2 class="u-mb-3"
+                        style="font-size: var(--text-lg); border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-1);">
+                        Your Preferences</h2>
+                    <div
+                        style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); background: var(--color-white); padding: var(--space-3); border: 1px solid var(--color-border); border-radius: var(--border-radius); font-size: var(--text-sm);">
+                        <div><strong>Role:</strong> <span id="display-pref-role">-</span></div>
+                        <div><strong>Locations:</strong> <span id="display-pref-loc">-</span></div>
+                        <div><strong>Mode:</strong> <span id="display-pref-mode">-</span></div>
+                        <div><strong>Experience:</strong> <span id="display-pref-exp">-</span></div>
+                    </div>
+                </div>
+
+                <div id="saved-job-list"
+                    style="max-width: var(--max-width-text); margin: 0 auto; margin-top: var(--space-5);">
+                    <!-- Saved jobs will be rendered here -->
+                </div>
+
+                <div id="saved-empty-state" class="empty-state"
                     style="max-width: var(--max-width-text); margin: 0 auto; margin-top: var(--space-5);">
                     <div class="empty-state__icon">○</div>
                     <h3 class="empty-state__title">No Saved Jobs</h3>
@@ -211,7 +275,24 @@
                         </select>
                     </div>
 
-                    <button class="btn btn--primary">Save Preferences</button>
+                    <button id="save-preferences-btn" class="btn btn--primary" onclick="
+                        const role = document.getElementById('pref-role').value;
+                        const loc = document.getElementById('pref-location').value;
+                        const mode = document.getElementById('pref-mode').value;
+                        const exp = document.getElementById('pref-exp').value;
+                        
+                        localStorage.setItem('userPrefs', JSON.stringify({ role, loc, mode, exp }));
+                        window.renderPreferences();
+
+                        const btn = this;
+                        const originalText = btn.textContent;
+                        btn.textContent = 'Saved!';
+                        btn.classList.add('btn--success');
+                        setTimeout(() => {
+                            btn.textContent = originalText;
+                            btn.classList.remove('btn--success');
+                        }, 2000);
+                    ">Save Preferences</button>
                 </div>
             </section>
 
@@ -234,6 +315,43 @@
         </main>
     </div>
 
+    <!-- JOB MODAL (Starts Hidden) -->
+    <div id="job-modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(17,17,17,0.5); z-index: 999; justify-content: center; align-items: center; padding: var(--space-3);">
+        <div class="card"
+            style="width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; position: relative;">
+            <button onclick="closeModal()"
+                style="position: absolute; top: var(--space-3); right: var(--space-3); background: none; border: none; font-size: 24px; cursor: pointer; color: var(--color-text-primary);">&times;</button>
+            <h2 id="modal-title" style="padding-right: var(--space-4);">Job Title</h2>
+            <p id="modal-company" style="font-weight: 500; margin-bottom: var(--space-3);">Company</p>
+
+            <div
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); margin-bottom: var(--space-3); font-size: var(--text-sm);">
+                <div><strong>Location:</strong> <span id="modal-location"></span></div>
+                <div><strong>Mode:</strong> <span id="modal-mode"></span></div>
+                <div><strong>Experience:</strong> <span id="modal-exp"></span></div>
+                <div><strong>Salary:</strong> <span id="modal-salary"></span></div>
+                <div><strong>Source:</strong> <span id="modal-source"></span></div>
+                <div><strong>Posted:</strong> <span id="modal-posted"></span> days ago</div>
+            </div>
+
+            <h3 style="margin-bottom: var(--space-1); font-size: var(--text-lg);">Skills Required</h3>
+            <div id="modal-skills"
+                style="display: flex; gap: var(--space-1); flex-wrap: wrap; margin-bottom: var(--space-3);">
+                <!-- Skill badges -->
+            </div>
+
+            <h3 style="margin-bottom: var(--space-1); font-size: var(--text-lg);">Description</h3>
+            <p id="modal-desc" style="margin-bottom: var(--space-4);"></p>
+
+            <div style="display: flex; gap: var(--space-2);">
+                <button id="modal-save-btn" class="btn btn--secondary">Save Job</button>
+                <a id="modal-apply-btn" href="#" target="_blank" class="btn btn--primary" style="flex: 1;">Apply Now</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jobs-data.js"></script>
     <script src="js/design-system.js"></script>
     <script>
         // Simple Client-Side Router
@@ -290,6 +408,15 @@
 
                 // Close mobile menu if open
                 mobileNavPanel.classList.remove('open');
+
+                // Refresh data for the specific view
+                if (viewId === 'route-dashboard') {
+                    if (typeof renderDashboard === 'function') renderDashboard();
+                }
+                if (viewId === 'route-saved') {
+                    if (typeof renderPreferences === 'function') renderPreferences();
+                    if (typeof renderSavedJobs === 'function') renderSavedJobs();
+                }
             }
 
             // Handle link clicks
@@ -312,6 +439,188 @@
             const initialPath = window.location.pathname;
             const initialViewId = routeMap[initialPath] || 'route-404';
             updateUI(initialPath, initialViewId);
+
+            // ============================================
+            // JOB NOTIFICATION TRACKER LOGIC
+            // ============================================
+
+            const dashboardJobList = document.getElementById('dashboard-job-list');
+            const dashboardEmptyState = document.getElementById('dashboard-empty-state');
+            const savedJobList = document.getElementById('saved-job-list');
+            const savedEmptyState = document.getElementById('saved-empty-state');
+
+            // Filters
+            const filterSearch = document.getElementById('filter-search');
+            const filterLocation = document.getElementById('filter-location');
+            const filterMode = document.getElementById('filter-mode');
+            const filterExp = document.getElementById('filter-exp');
+            const filterSource = document.getElementById('filter-source');
+            const filterSort = document.getElementById('filter-sort');
+
+            let savedJobIds = JSON.parse(localStorage.getItem('savedJobIds') || '[]');
+
+            function saveJobData() {
+                localStorage.setItem('savedJobIds', JSON.stringify(savedJobIds));
+            }
+
+            window.toggleSaveJob = function (jobId) {
+                if (savedJobIds.includes(jobId)) {
+                    savedJobIds = savedJobIds.filter(id => id !== jobId);
+                } else {
+                    savedJobIds.push(jobId);
+                }
+                saveJobData();
+                renderDashboard();
+                renderSavedJobs();
+                if (window.currentModalJobId === jobId) {
+                    const saveBtn = document.getElementById('modal-save-btn');
+                    saveBtn.textContent = savedJobIds.includes(jobId) ? 'Unsave Job' : 'Save Job';
+                }
+            };
+
+            window.viewJob = function (jobId) {
+                const job = window.JOBS_DATA.find(j => j.id === jobId);
+                if (!job) return;
+
+                window.currentModalJobId = jobId;
+                document.getElementById('modal-title').textContent = job.title;
+                document.getElementById('modal-company').textContent = job.company;
+                document.getElementById('modal-location').textContent = job.location;
+                document.getElementById('modal-mode').textContent = job.mode;
+                document.getElementById('modal-exp').textContent = job.experience;
+                document.getElementById('modal-salary').textContent = job.salaryRange;
+                document.getElementById('modal-source').textContent = job.source;
+                document.getElementById('modal-posted').textContent = job.postedDaysAgo;
+
+                const skillsContainer = document.getElementById('modal-skills');
+                skillsContainer.innerHTML = job.skills.map(skill =>
+                    `<span style="background: var(--color-background); border: 1px solid var(--color-border); padding: 2px 8px; border-radius: 4px; font-size: var(--text-xs);">${skill}</span>`
+                ).join('');
+
+                document.getElementById('modal-desc').textContent = job.description;
+
+                const saveBtn = document.getElementById('modal-save-btn');
+                saveBtn.textContent = savedJobIds.includes(job.id) ? 'Unsave Job' : 'Save Job';
+                saveBtn.onclick = () => window.toggleSaveJob(job.id);
+
+                document.getElementById('modal-apply-btn').href = job.applyUrl;
+
+                document.getElementById('job-modal').style.display = 'flex';
+            };
+
+            window.closeModal = function () {
+                document.getElementById('job-modal').style.display = 'none';
+            };
+
+            function createJobCardHTML(job) {
+                const isSaved = savedJobIds.includes(job.id);
+                return `
+                <div class="card card--no-shadow" style="margin-bottom: var(--space-3);">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <h3 style="margin-bottom: var(--space-1);">${job.title}</h3>
+                            <p style="font-weight: 500; font-size: var(--text-sm);">${job.company}</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <span style="font-size: var(--text-xs); background: var(--color-background); padding: var(--space-1) var(--space-2); border-radius: 4px; border: 1px solid var(--color-border);">${job.source}</span>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: var(--space-3); margin-top: var(--space-2); font-size: var(--text-sm); opacity: 0.8; flex-wrap: wrap;">
+                        <span>📍 ${job.location} (${job.mode})</span>
+                        <span>💼 ${job.experience}</span>
+                        <span>💰 ${job.salaryRange}</span>
+                    </div>
+                    
+                    <p style="font-size: var(--text-xs); margin-top: var(--space-2); opacity: 0.6;">Posted ${job.postedDaysAgo} days ago</p>
+
+                    <div style="display: flex; gap: var(--space-2); margin-top: var(--space-3);">
+                        <button class="btn btn--secondary" onclick="viewJob('${job.id}')">View</button>
+                        <button class="btn btn--secondary" onclick="toggleSaveJob('${job.id}')">${isSaved ? 'Unsave' : 'Save'}</button>
+                        <a href="${job.applyUrl}" target="_blank" class="btn btn--primary">Apply</a>
+                    </div>
+                </div>
+                `;
+            }
+
+            function renderDashboard() {
+                if (!window.JOBS_DATA) return;
+
+                const term = filterSearch.value.toLowerCase();
+                const loc = filterLocation.value;
+                const mode = filterMode.value;
+                const exp = filterExp.value;
+                const src = filterSource.value;
+                const sort = filterSort.value;
+
+                let filtered = window.JOBS_DATA.filter(job => {
+                    const matchSearch = job.title.toLowerCase().includes(term) || job.company.toLowerCase().includes(term);
+                    const matchLoc = loc ? job.location === loc : true;
+                    const matchMode = mode ? job.mode === mode : true;
+                    const matchExp = exp ? job.experience === exp : true;
+                    const matchSrc = src ? job.source === src : true;
+                    return matchSearch && matchLoc && matchMode && matchExp && matchSrc;
+                });
+
+                if (sort === 'latest') {
+                    filtered.sort((a, b) => a.postedDaysAgo - b.postedDaysAgo);
+                } else {
+                    filtered.sort((a, b) => b.postedDaysAgo - a.postedDaysAgo);
+                }
+
+                if (filtered.length === 0) {
+                    dashboardJobList.innerHTML = '';
+                    dashboardEmptyState.classList.remove('u-hidden');
+                } else {
+                    dashboardEmptyState.classList.add('u-hidden');
+                    dashboardJobList.innerHTML = filtered.map(createJobCardHTML).join('');
+                }
+            }
+
+            function renderSavedJobs() {
+                if (!window.JOBS_DATA) return;
+
+                const savedList = window.JOBS_DATA.filter(job => savedJobIds.includes(job.id));
+                if (savedList.length === 0) {
+                    savedJobList.innerHTML = '';
+                    savedEmptyState.classList.remove('u-hidden');
+                } else {
+                    savedEmptyState.classList.add('u-hidden');
+                    savedJobList.innerHTML = savedList.map(createJobCardHTML).join('');
+                }
+            }
+
+            // Bind filters
+            [filterSearch, filterLocation, filterMode, filterExp, filterSource, filterSort].forEach(el => {
+                if (el) el.addEventListener('input', renderDashboard);
+            });
+
+            window.renderPreferences = function () {
+                const prefsStr = localStorage.getItem('userPrefs');
+                const prefsContainer = document.getElementById('saved-preferences-container');
+                if (prefsStr) {
+                    const prefs = JSON.parse(prefsStr);
+                    document.getElementById('display-pref-role').textContent = prefs.role || 'Any';
+                    document.getElementById('display-pref-loc').textContent = prefs.loc || 'Any';
+                    document.getElementById('display-pref-mode').textContent = prefs.mode || 'Any';
+                    document.getElementById('display-pref-exp').textContent = prefs.exp || 'Any';
+
+                    document.getElementById('pref-role').value = prefs.role || '';
+                    document.getElementById('pref-location').value = prefs.loc || '';
+                    document.getElementById('pref-mode').value = prefs.mode || 'Remote';
+                    document.getElementById('pref-exp').value = prefs.exp || 'Junior';
+
+                    if (prefsContainer) prefsContainer.style.display = 'block';
+                } else {
+                    if (prefsContainer) prefsContainer.style.display = 'none';
+                }
+            };
+
+            // Initial Render
+            window.renderPreferences();
+            renderDashboard();
+            renderSavedJobs();
+
         });
     </script>
 </body>
